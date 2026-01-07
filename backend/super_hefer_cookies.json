@@ -1,0 +1,74 @@
+[
+  {
+    "name": "cf_clearance",
+    "value": "f2RofTEoknpTuPb4BFEFT18X98liTa5Q6q.Hmf0fteY-1767812069-1.2.1.1-qqY44cB9d2cUvSOCrs6IMXlZF.ZVfDxsSh2RLQ77NePx6GFGGuhDpyLxLoJgSzRHt.oE6mdWhm6HSlXczkhCsptnXjU9kapzjwPw2DY16jOo3MXfWHYe50ptHBaFNpfW7qxbdBBoB9SaokD7R79jYYy2Qn3PQPsHy7N.xEv6UQfY6JwS.5lFZ1ss6YX0q2zlrnTEAs0E5n2kPRYEM1i4k.B8IWTpwaDPB52dH14NmFw",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1799348069.598536,
+    "httpOnly": true,
+    "secure": true,
+    "sameSite": "None",
+    "partitionKey": "https://shopo.co.il",
+    "_crHasCrossSiteAncestor": false
+  },
+  {
+    "name": "_ga_K257S23T0D",
+    "value": "GS2.1.s1767812069$o1$g0$t1767812069$j60$l0$h872594575",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1802372069.662561,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_ga",
+    "value": "GA1.1.1092853479.1767812070",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1802372069.662991,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_ga_123",
+    "value": "GS2.1.s1767812069$o1$g0$t1767812069$j60$l0$h0",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1802372069.884968,
+    "httpOnly": false,
+    "secure": true,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_fbp",
+    "value": "fb.2.1767812071029.975739140664880859",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1775588081,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "_ga_5MXSECGZL4",
+    "value": "GS2.1.s1767812076$o1$g0$t1767812076$j60$l0$h0",
+    "domain": ".shopo.co.il",
+    "path": "/",
+    "expires": 1802372076.17412,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "retailerId",
+    "value": "1196",
+    "domain": "superhefer.shopo.co.il",
+    "path": "/",
+    "expires": 1770404077.639188,
+    "httpOnly": false,
+    "secure": false,
+    "sameSite": "Lax"
+  }
+]
