@@ -59,6 +59,7 @@ async def test_super_hefer():
             print(f"   Price: {product.price} ₪")
             print(f"   URL: {product.url}")
             print(f"   Image: {product.image_url}")
+            print(f"   Size: {product.size_descriptor}")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -225,7 +226,7 @@ async def debug_super_hefer_page():
                     print("City selected!")
 
             # Dismiss any popups that appear
-            for dismiss_selector in ["button:has-text('המשיכו בקנייה')", "button:has-text('המשך לקנייה')", "button:has-text('סגור')"]:
+            for dismiss_selector in ["button.close-dialog-corner-button", "button:has-text('המשיכו בקנייה')", "button:has-text('המשך לקנייה')", "button:has-text('אישור')", "button:has-text('סגור')", "button[aria-label='סגור']"]:
                 try:
                     btn = await page.query_selector(dismiss_selector)
                     if btn and await btn.is_visible():

@@ -64,8 +64,10 @@ class SuperHeferScraper(BaseScraper):
         try:
             # Common popup dismiss buttons - including "continue shopping" type buttons
             dismiss_selectors = [
+                "button.close-dialog-corner-button",
                 "button:has-text('המשיכו בקנייה')",
                 "button:has-text('המשך לקנייה')",
+                "button:has-text('אישור')",
                 "button:has-text('לא תודה')",
                 "button:has-text('סגור')",
                 "button:has-text('אולי אח\"כ')",
@@ -74,6 +76,7 @@ class SuperHeferScraper(BaseScraper):
                 ".dismiss-btn",
                 ".modal-close",
                 "button[aria-label='close']",
+                "button[aria-label='סגור']",
             ]
             for selector in dismiss_selectors:
                 try:
@@ -179,28 +182,14 @@ class SuperHeferScraper(BaseScraper):
         """Extract products from the page."""
         products = []
 
-        # Try various selectors for shopo platform
-        selectors_to_try = [
-            "[class*='ProductCard']",
-            "[class*='productCard']",
-            "[class*='product-card']",
-            ".product-item",
-            "[class*='Product_product']",
-            "[class*='item-card']",
-        ]
-
-        product_elements = []
-        for selector in selectors_to_try:
-            elements = await page.query_selector_all(selector)
-            if elements:
-                product_elements = elements
-                logger.debug(f"Found {len(elements)} products with selector: {selector}")
-                break
+        # The shopo platform uses sp-product custom elements
+        product_elements = await page.query_selector_all("sp-product[aria-labelledby]")
+        logger.debug(f"Found {len(product_elements)} sp-product elements")
 
         if not product_elements:
-            # Fallback: look for any elements containing price info
-            all_elements = await page.query_selector_all("[class*='price']")
-            logger.debug(f"Fallback: found {len(all_elements)} price elements")
+            # Fallback to product-item divs
+            product_elements = await page.query_selector_all(".product-item")
+            logger.debug(f"Fallback: found {len(product_elements)} product-item elements")
 
         seen_names = set()
         for i, element in enumerate(product_elements):
@@ -220,66 +209,86 @@ class SuperHeferScraper(BaseScraper):
     async def _extract_single_product(self, element, index: int) -> ProductCandidate | None:
         """Extract data from a single product element."""
         try:
-            # Get all text content to find name and price
-            text_content = await element.inner_text()
-            lines = [l.strip() for l in text_content.split('\n') if l.strip()]
+            # Get product ID from aria-labelledby attribute (e.g., "product_2909971_name")
+            aria_labelledby = await element.get_attribute("aria-labelledby")
+            external_id = None
+            if aria_labelledby:
+                # Extract ID like "2909971" from "product_2909971_name"
+                id_match = re.search(r'product_(\d+)_name', aria_labelledby)
+                if id_match:
+                    external_id = id_match.group(1)
 
-            if len(lines) < 2:
-                return None
-
-            # Usually name is first meaningful line, price contains numbers
+            # Get product name from the .name element with aria-label
             name = None
-            price = None
+            name_elem = await element.query_selector(".name[aria-label]")
+            if name_elem:
+                name = await name_elem.get_attribute("aria-label")
+            if not name:
+                # Fallback to inner text of .name element
+                name_elem = await element.query_selector(".name")
+                if name_elem:
+                    name = (await name_elem.inner_text()).strip()
 
-            for line in lines:
-                # Skip very short lines
-                if len(line) < 2:
-                    continue
-
-                # Check if this line looks like a price
-                price_match = re.search(r'(\d+\.?\d*)\s*₪?', line)
-                if price_match and not name:
-                    # Price found before name - skip
-                    continue
-                elif price_match and name:
-                    # Found price after name
-                    try:
-                        price = float(price_match.group(1))
-                        break
-                    except ValueError:
-                        continue
-                elif not name and len(line) > 2:
-                    # This looks like a product name
-                    name = line
-
-            if not name or not price:
+            if not name:
                 return None
 
-            # Get URL
-            url = None
-            link_elem = await element.query_selector("a[href]")
-            if link_elem:
-                href = await link_elem.get_attribute("href")
-                if href:
-                    url = href if href.startswith("http") else f"{self.BASE_URL}{href}"
+            # Get price from meta[itemprop="price"] or span.price
+            price = None
+            price_meta = await element.query_selector("meta[itemprop='price']")
+            if price_meta:
+                price_content = await price_meta.get_attribute("content")
+                if price_content:
+                    try:
+                        price = float(price_content)
+                    except ValueError:
+                        pass
 
-            # Get image
+            if price is None:
+                # Fallback to span.price text
+                price_elem = await element.query_selector(".sp-product-price .price")
+                if price_elem:
+                    price_text = await price_elem.inner_text()
+                    # Extract number from text like "₪9.90"
+                    price_match = re.search(r'(\d+\.?\d*)', price_text)
+                    if price_match:
+                        try:
+                            price = float(price_match.group(1))
+                        except ValueError:
+                            pass
+
+            if price is None:
+                return None
+
+            # Get size/weight descriptor
+            size_descriptor = None
+            weight_elem = await element.query_selector(".weight")
+            if weight_elem:
+                weight_text = (await weight_elem.inner_text()).strip()
+                # Remove leading "| " if present
+                size_descriptor = weight_text.lstrip("| ").strip()
+
+            # Get product image URL from background-image style
             image_url = None
-            img_elem = await element.query_selector("img")
-            if img_elem:
-                image_url = await img_elem.get_attribute("src") or await img_elem.get_attribute("data-src")
-                if image_url and not image_url.startswith("http"):
-                    image_url = f"{self.BASE_URL}{image_url}"
+            img_div = await element.query_selector(".image[style*='background-image']")
+            if img_div:
+                style = await img_div.get_attribute("style")
+                if style:
+                    # Extract URL from background-image: url("...")
+                    url_match = re.search(r'url\(["\']?([^"\')\s]+)["\']?\)', style)
+                    if url_match:
+                        image_url = url_match.group(1)
 
-            external_id = f"sh_{index}_{hash(name) % 100000}"
+            # Generate external ID if not found
+            if not external_id:
+                external_id = f"sh_{index}_{hash(name) % 100000}"
 
             return self._make_product_candidate(
                 external_id=external_id,
                 name=name,
                 price=price,
-                url=url,
+                url=None,  # No direct product URL in the search results
                 image_url=image_url,
-                size_descriptor=None,
+                size_descriptor=size_descriptor,
             )
 
         except Exception as e:
