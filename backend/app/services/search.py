@@ -60,8 +60,9 @@ class SearchService:
         try:
             results = await scraper.search(query)
 
-            # Cache results
-            await self._cache_results(store_id, normalized_query, results)
+            # Only cache non-empty results to avoid persisting failures
+            if results:
+                await self._cache_results(store_id, normalized_query, results)
 
             return results
 
