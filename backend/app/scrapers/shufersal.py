@@ -108,9 +108,9 @@ class ShufersalScraper(BaseScraper):
                 if image_url and not image_url.startswith("http"):
                     image_url = f"{self.BASE_URL}{image_url}"
 
-            # Get size descriptor from the visible text
+            # Get size descriptor from brand-name section (e.g., "200 גרם" or "מחיר לפי משקל")
             size_descriptor = None
-            size_elem = await element.query_selector(".miglog-prod-measure, .product-size")
+            size_elem = await element.query_selector(".brand-name span:first-child")
             if size_elem:
                 size_descriptor = (await size_elem.inner_text()).strip()
 

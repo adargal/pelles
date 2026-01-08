@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import delete
 
 from app.database import get_db
+from app.models import SearchCache
 from app.schemas import ComparisonRequest, ComparisonResponse, OverrideRequest
 from app.services.comparison import ComparisonService
 
@@ -53,3 +55,21 @@ async def list_stores():
             {"id": "super_hefer", "name": "Super Hefer Large", "enabled": True},
         ]
     }
+
+
+@router.delete("/cache")
+async def clear_cache(db: AsyncSession = Depends(get_db)):
+    """Clear all cached search results."""
+    result = await db.execute(delete(SearchCache))
+    await db.commit()
+    return {"message": "Cache cleared", "deleted_count": result.rowcount}
+
+
+@router.delete("/cache/{store_id}")
+async def clear_store_cache(store_id: str, db: AsyncSession = Depends(get_db)):
+    """Clear cached search results for a specific store."""
+    result = await db.execute(
+        delete(SearchCache).where(SearchCache.store_id == store_id)
+    )
+    await db.commit()
+    return {"message": f"Cache cleared for {store_id}", "deleted_count": result.rowcount}

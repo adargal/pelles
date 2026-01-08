@@ -1,10 +1,10 @@
 [
   {
     "name": "cf_clearance",
-    "value": "FA_4HREBIGwV8SPXc9BrDl6buK9EYsCMEjugs0NE2Vs-1767812856-1.2.1.1-aUeC94EhZ8q_4PgULbE1Nsigcx8FzD7fa7UMZ615OEEY.1pvZIASZDCYqbkgF6dB6Y8BnRyXuNSCMDO_YOdDxzO4c5hJ1.XoZ0H9Uo5YaEEusLY3CFyJsYBBbCnd7gmY7IJIdnVnmyrbsYx2Ky0Uve4WEuC0JOOwEg7z5m_og..65Ij0QIOgIZoxNmIO5we4L.SZWQ5vQVl3B9zmdwlmTAHIGaZILnc_psxgjcuKhzs",
+    "value": "Om1ZvOrfSi.D3d4evrkAiiw_DV4n25fOB5Ez7asWahg-1767857485-1.2.1.1-pXhtV_TN75U5ZpvBLXwRNjMw29FqmbQViE3aDlwshVzSS5uPV9UW8URDbtRiT__P0EEI.7_g3Y.p7D_Mf0yCPAsI3GOYF.13zVdO16eHUFqxacRFEnHh4XQUPle.iPjrLn4qCfNqtfuz.ihqzpPiy6sMDUqjPtkuZ5lP9CBmZiuCGgB4K7ISswdjQ0iHad8h3UBKUOKnWRwaniDLOrlhjjWzx4a.WksIYtqm7jYo43k",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1799348856.616997,
+    "expires": 1799393486.242716,
     "httpOnly": true,
     "secure": true,
     "sameSite": "None",
@@ -13,20 +13,20 @@
   },
   {
     "name": "_ga",
-    "value": "GA1.1.284435777.1767812857",
+    "value": "GA1.1.1882716293.1767857486",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1802372856.893373,
+    "expires": 1802417486.502628,
     "httpOnly": false,
     "secure": false,
     "sameSite": "Lax"
   },
   {
     "name": "_fbp",
-    "value": "fb.2.1767812858064.814368492523476559",
+    "value": "fb.2.1767857487240.732614046739187602",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1775589286,
+    "expires": 1775633883,
     "httpOnly": false,
     "secure": false,
     "sameSite": "Lax"
@@ -36,47 +36,37 @@
     "value": "1196",
     "domain": "superhefer.shopo.co.il",
     "path": "/",
-    "expires": 1770405286.741371,
+    "expires": 1770449883.921093,
     "httpOnly": false,
     "secure": false,
     "sameSite": "Lax"
   },
   {
-    "name": "fr",
-    "value": "09yOx75j3WoKl6hmT..BpXq8N...1.0.BpXq8N.",
-    "domain": ".facebook.com",
-    "path": "/",
-    "expires": 1775588877.279399,
-    "httpOnly": true,
-    "secure": true,
-    "sameSite": "None"
-  },
-  {
     "name": "_ga_K257S23T0D",
-    "value": "GS2.1.s1767812856$o1$g1$t1767813281$j60$l0$h1056951475",
+    "value": "GS2.1.s1767857486$o1$g1$t1767857878$j22$l0$h1770103828",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1802373281.223102,
+    "expires": 1802417878.417791,
     "httpOnly": false,
     "secure": false,
     "sameSite": "Lax"
   },
   {
     "name": "_ga_123",
-    "value": "GS2.1.s1767812857$o1$g1$t1767813281$j60$l0$h0",
+    "value": "GS2.1.s1767857486$o1$g1$t1767857878$j22$l0$h0",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1802373281.423176,
+    "expires": 1802417878.64004,
     "httpOnly": false,
     "secure": true,
     "sameSite": "Lax"
   },
   {
     "name": "_ga_5MXSECGZL4",
-    "value": "GS2.1.s1767812863$o1$g0$t1767813286$j55$l0$h0",
+    "value": "GS2.1.s1767857493$o1$g0$t1767857883$j17$l0$h0",
     "domain": ".shopo.co.il",
     "path": "/",
-    "expires": 1802373286.207031,
+    "expires": 1802417883.373151,
     "httpOnly": false,
     "secure": false,
     "sameSite": "Lax"
