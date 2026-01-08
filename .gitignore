@@ -1,0 +1,3 @@
+# Debug files (HTML and PNG snapshots)
+debug_*.html
+debug_*.png
