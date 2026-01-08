@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ItemMatch, StoreMatch, ConfidenceLevel } from '../types';
 import { ProductSelector } from './ProductSelector';
+import { ImageModal } from './ImageModal';
 
 interface ItemRowProps {
   item: ItemMatch;
@@ -33,9 +34,11 @@ function ConfidenceBadge({ confidence }: { confidence: ConfidenceLevel | null })
 function StoreMatchCell({
   match,
   onChangeClick,
+  onImageClick,
 }: {
   match: StoreMatch;
   onChangeClick: () => void;
+  onImageClick: (imageUrl: string, alt: string) => void;
 }) {
   if (!match.product) {
     return (
@@ -60,7 +63,8 @@ function StoreMatchCell({
           <img
             src={match.product.image_url}
             alt={match.product.name}
-            className="w-12 h-12 object-contain"
+            className="w-12 h-12 object-contain cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => onImageClick(match.product!.image_url!, match.product!.name)}
           />
         )}
         <div className="flex-1 min-w-0">
@@ -99,12 +103,17 @@ function StoreMatchCell({
 
 export function ItemRow({ item, storeIds, onOverride }: ItemRowProps) {
   const [selectorOpen, setSelectorOpen] = useState<string | null>(null);
+  const [enlargedImage, setEnlargedImage] = useState<{ url: string; alt: string } | null>(null);
 
   const handleSelect = (productId: string) => {
     if (selectorOpen) {
       onOverride(item.query, selectorOpen, productId);
       setSelectorOpen(null);
     }
+  };
+
+  const handleImageClick = (imageUrl: string, alt: string) => {
+    setEnlargedImage({ url: imageUrl, alt });
   };
 
   return (
@@ -121,6 +130,7 @@ export function ItemRow({ item, storeIds, onOverride }: ItemRowProps) {
               key={storeId}
               match={match}
               onChangeClick={() => setSelectorOpen(storeId)}
+              onImageClick={handleImageClick}
             />
           );
         })}
@@ -131,6 +141,14 @@ export function ItemRow({ item, storeIds, onOverride }: ItemRowProps) {
           alternatives={item.matches[selectorOpen]?.alternatives || []}
           onSelect={handleSelect}
           onClose={() => setSelectorOpen(null)}
+        />
+      )}
+
+      {enlargedImage && (
+        <ImageModal
+          imageUrl={enlargedImage.url}
+          alt={enlargedImage.alt}
+          onClose={() => setEnlargedImage(null)}
         />
       )}
     </div>
